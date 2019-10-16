@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TouchableOpacity ,StyleSheet, Text, View, TextInput, Button } from 'react-native';
+import { TouchableOpacity ,StyleSheet, Text, View, TextInput, ScrollView, FlatList } from 'react-native';
 
 export default function App() {
   // use useState to get the values 
@@ -12,7 +12,7 @@ export default function App() {
   };
 
   const addNoteHandler = () => {
-    setNotes( currentNote => ([ ...currentNote, enteredNote ]) )
+    setNotes( currentNote => ([ ...currentNote, { key: Math.random().toString(), value: enteredNote} ]) )
   };
 
   return (
@@ -28,13 +28,14 @@ export default function App() {
           <Text style={styles.button}>Add</Text>
         </TouchableOpacity>
       </View>
-      <View>
-        {notes.map((note, id) => 
-          <View key={id} style={styles.notes}>
-            <Text>{note}</Text>
-          </View>
-        )}
-      </View>
+        <FlatList 
+          data={notes}
+          renderItem={ itemData => (
+            <View style={styles.notes}>
+              <Text>{itemData.item.value}</Text>
+            </View> 
+          )} 
+        />
     </View>
   );
 }
@@ -63,7 +64,6 @@ const styles = StyleSheet.create({
   },
   notes: {
     alignContent: 'center',
-    width: '100%',
     backgroundColor: 'orange',
     color: 'white',
     marginTop: 10,
